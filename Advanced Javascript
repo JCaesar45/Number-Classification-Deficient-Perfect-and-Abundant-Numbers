@@ -1,0 +1,111 @@
+// script.js
+
+// Import Chart.js (already included via CDN in HTML)
+
+const classifyBtn = document.getElementById('classifyBtn');
+const maxNumberInput = document.getElementById('maxNumber');
+
+const deficientCountElem = document.getElementById('deficientCount');
+const perfectCountElem = document.getElementById('perfectCount');
+const abundantCountElem = document.getElementById('abundantCount');
+
+let chartInstance = null;
+
+classifyBtn.addEventListener('click', () => {
+  const maxNum = parseInt(maxNumberInput.value);
+  if (isNaN(maxNum) || maxNum < 1) {
+    alert('Please enter a valid number greater than 0');
+    return;
+  }
+
+  const results = getDPA(maxNum);
+  updateResults(results);
+  drawChart(results);
+});
+
+// Function to classify numbers
+function getDPA(num) {
+  let deficient = 0;
+  let perfect = 0;
+  let abundant = 0;
+
+  for (let n = 1; n <= num; n++) {
+    const sumDivisors = properDivisorsSum(n);
+    if (sumDivisors < n) {
+      deficient++;
+    } else if (sumDivisors === n) {
+      perfect++;
+    } else {
+      abundant++;
+    }
+  }
+
+  return [deficient, perfect, abundant];
+}
+
+// Helper to find proper divisors sum
+function properDivisorsSum(n) {
+  if (n === 1) return 0;
+  let sum = 1;
+  const sqrtN = Math.sqrt(n);
+  for (let i = 2; i <= sqrtN; i++) {
+    if (n % i === 0) {
+      sum += i;
+      const otherDivisor = n / i;
+      if (otherDivisor !== i) {
+        sum += otherDivisor;
+      }
+    }
+  }
+  return sum;
+}
+
+// Update counts in DOM
+function updateResults([def, perf, abund]) {
+  deficientCountElem.textContent = def;
+  perfectCountElem.textContent = perf;
+  abundantCountElem.textContent = abund;
+}
+
+// Draw pie chart
+function drawChart([def, perf, abund]) {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+
+  // Destroy previous chart if exists
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Deficient', 'Perfect', 'Abundant'],
+      datasets: [{
+        data: [def, perf, abund],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(255, 206, 86, 0.7)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        title: {
+          display: true,
+          text: 'Distribution of Number Classifications'
+        }
+      }
+    }
+  });
+}
