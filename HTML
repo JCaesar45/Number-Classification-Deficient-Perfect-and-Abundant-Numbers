@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Classifier: Deficient, Perfect, Abundant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Number Classifier</h1>
+    <p class="tagline">Discover the fascinating world of numbers: Deficient, Perfect, and Abundant</p>
+  </header>
+
+  <section class="input-section">
+    <h2>Enter a Range</h2>
+    <input type="number" id="maxNumber" placeholder="Enter a maximum number" min="1" />
+    <button id="classifyBtn">Classify Numbers</button>
+  </section>
+
+  <section class="results-section">
+    <h2>Results</h2>
+    <div class="stats">
+      <div class="stat"><h3>Deficient</h3><p id="deficientCount">0</p></div>
+      <div class="stat"><h3>Perfect</h3><p id="perfectCount">0</p></div>
+      <div class="stat"><h3>Abundant</h3><p id="abundantCount">0</p></div>
+    </div>
+    <canvas id="chartCanvas"></canvas>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Educational Number Classifier | Designed by Jordan Leturgez</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js for visualizations -->
+</body>
+</html>
